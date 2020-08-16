@@ -1,0 +1,53 @@
+<h1 class="text-center mt-3 mb-3">View All Posts</h1>
+
+{{#if success_message}}
+    <div class="alert alert-success">{{success_message}}</div>
+{{/if}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Allow Comments</th>
+                        <th>Date</th>
+                        <th>Body</th>
+                        <th>Image</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                       {{#if posts}}
+
+                           {{#each posts}}
+                               <tr>
+                                   <td>{{title}}</td>
+                                   <td>{{status}}</td>
+                                   <td>{{allowComments}}</td>
+                                   <td>{{generateDate date 'Do-MM-YYYY'}}</td>
+                                   <td>{{body}}</td>
+                                   <td>
+                                       <img src="/images/{{image}}" height="64" width="64" alt="">
+                                   </td>
+                                   <td><a href="/admin/posts/edit/{{_id}}" class="btn btn-success btn-sm">Edit</a></td>
+                                   <td>
+                                       <form action="/admin/posts/delete/{{_id}}?_method=DELETE" method="POST">
+                                           <button class="btn btn-danger btn-sm">Delete</button>
+                                       </form>
+                                   </td>
+                               </tr>
+                           {{/each}}
+
+                       {{/if}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
