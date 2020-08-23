@@ -8,6 +8,11 @@ const PostSchema = new Schema({
         require: true,
     },
 
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: "categories"
+    },
+
     status: {
     type: String,
     default: 'public'

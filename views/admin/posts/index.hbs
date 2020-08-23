@@ -13,6 +13,7 @@
                     <thead>
                     <tr>
                         <th>Title</th>
+                        <th>Category</th>
                         <th>Status</th>
                         <th>Allow Comments</th>
                         <th>Date</th>
@@ -28,6 +29,7 @@
                            {{#each posts}}
                                <tr>
                                    <td>{{title}}</td>
+                                   <td>{{category.name}}</td>
                                    <td>{{status}}</td>
                                    <td>{{allowComments}}</td>
                                    <td>{{generateDate date 'Do-MM-YYYY'}}</td>
@@ -38,7 +40,7 @@
                                    <td><a href="/admin/posts/edit/{{_id}}" class="btn btn-success btn-sm">Edit</a></td>
                                    <td>
                                        <form action="/admin/posts/delete/{{_id}}?_method=DELETE" method="POST">
-                                           <button class="btn btn-danger btn-sm">Delete</button>
+                                           <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
                                        </form>
                                    </td>
                                </tr>

@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const Post = require('../../../models/Post');
+const Category = require('../../../models/Category');
 const {isEmpty} = require('../../../helpers/upload-helper')
 
 
@@ -17,14 +18,17 @@ router.all('/posts/*', (req, res, next)=>{
 
 //Get all posts
 router.get('/', (req, res)=>{
-     Post.find({}).lean().then(posts => {
+     Post.find({}).populate('category').lean().then(posts => {
         res.render('admin/posts', {posts: posts});
     });
 });
 
 // Show form for Creating post
 router.get('/create', (req, res)=>{
-   res.render('admin/posts/create');
+    Category.find({}).lean().then(categories => {
+        res.render('admin/posts/create', {categories: categories});
+    })
+
 });
 
 //Store Post
@@ -59,11 +63,13 @@ router.post('/store', (req, res)=>{
 
    let allowComments = !!req.body.allowComments;
    let title = req.body.title;
+   let category = req.body.category;
    let status = req.body.status;
    let body = req.body.body;
 
    const newPost = new Post({
        title: title,
+       category: category,
        status: status,
        allowComments: allowComments,
        body: body,
@@ -84,8 +90,11 @@ router.post('/store', (req, res)=>{
 //Show form for editing posts
 router.get('/edit/:id', (req, res)=>{
     const id = req.params.id;
-    Post.findById(id).lean().then(post => {
-       res.render('admin/posts/edit', {post: post});
+       Post.findById(id).populate('category').lean().then(post => {
+        Category.find({}).lean().then(categories => {
+            res.render('admin/posts/edit', {post: post, categories: categories});
+        })
+
     }).catch(err => res.send('Could not find post' ));
 });
 
@@ -97,6 +106,7 @@ router.put('/update/:id', (req, res) => {
 
     let title = req.body.title;
     let status = req.body.status;
+    let category = req.body.category;
     let body = req.body.body;
 
 
@@ -119,6 +129,7 @@ router.put('/update/:id', (req, res) => {
             post.title = title;
             post.status = status;
             post.allowComments = allowComments;
+            post.category = category;
             post.image = imageName;
             post.body = body;
 
@@ -132,6 +143,7 @@ router.put('/update/:id', (req, res) => {
 
 
                 post.title = title;
+                post.category = category;
                 post.status =status;
                 post.allowComments = allowComments;
                 post.body = body;
