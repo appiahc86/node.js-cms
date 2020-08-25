@@ -7,6 +7,9 @@ const exphbs  = require('express-handlebars');
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+
+
 const app = express();
 
 mongoose.Promise = global.Promise;
@@ -23,19 +26,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
 
-
+// Body Parser
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // session
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
+    resave: true,
+    saveUninitialized: true
 }))
 
-//Flash
+
+//Passport
+app.use(passport.initialize())
+app.use(passport.session())
+
+//Local Variables
 app.use(flash());
 app.use((req, res, next)=>{
+    res.locals.user = req.user || null;
+    console.log(req.user)
     res.locals.success_message = req.flash('success_message');
     next();
 });
@@ -44,9 +55,6 @@ app.use((req, res, next)=>{
 //File Upload
 app.use(upload());
 
-// Body Parser
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 
 //load helpers
 const {selected, generateDate} = require('./helpers/hbsHelpers');

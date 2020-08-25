@@ -40,12 +40,11 @@
                                    <td><a href="/admin/posts/edit/{{_id}}" class="btn btn-success btn-sm">Edit</a></td>
                                    <td>
                                        <form action="/admin/posts/delete/{{_id}}?_method=DELETE" method="POST">
-                                           <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')">Delete</button>
                                        </form>
                                    </td>
                                </tr>
                            {{/each}}
-
                        {{/if}}
                     </tbody>
                 </table>
