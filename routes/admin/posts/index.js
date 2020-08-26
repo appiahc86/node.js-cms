@@ -5,13 +5,14 @@ const path = require('path');
 const Post = require('../../../models/Post');
 const Category = require('../../../models/Category');
 const {isEmpty} = require('../../../helpers/upload-helper')
-
-
-
 const uploadDir = path.join(__dirname, '../../../public/images/');
+const {userAuthenticated} = require('../../../helpers/auth');
 
 
-router.all('/posts/*', (req, res, next)=>{
+
+
+
+router.all('/*', (req, res, next)=>{
     req.app.locals.layout = 'admin';
     next();
 });
@@ -176,13 +177,23 @@ router.delete('/delete/:id', (req, res) => {
 
     const id = req.params.id;
 
-    Post.findOne({_id: id}).then(post =>{
+    Post.findOne({_id: id}).populate('comments').then(post =>{
+
+     // Delete posts comments
+        if (post.comments.length > 0){
+            post.comments.forEach(comment => {
+               comment.remove();
+            });
+        }
+
         //delete image
         fs.unlink(uploadDir + post.image, (err)=>{
             if (err) console.log(err);
         });
         post.remove();
+        req.flash('success_message', 'Post deleted successfully');
         res.redirect('/admin/posts');
+
     }).catch(error => {
         res.send('Error Occurred');
     });

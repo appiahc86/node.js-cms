@@ -46,8 +46,8 @@ app.use(passport.session())
 app.use(flash());
 app.use((req, res, next)=>{
     res.locals.user = req.user || null;
-    console.log(req.user)
     res.locals.success_message = req.flash('success_message');
+    res.locals.error = req.flash('error');
     next();
 });
 
@@ -64,16 +64,18 @@ app.engine('hbs', exphbs({defaultLayout: 'home', extname: 'hbs', helpers:{select
 app.set('view engine', 'hbs');
 
 //Load routes
-const home = require('./routes/home');
-const admin = require('./routes/admin');
-const adminPosts = require('./routes/admin/posts');
+const homeRouter = require('./routes/home/index');
+const adminRouter = require('./routes/admin/index');
+const adminPostsRouter = require('./routes/admin/posts/index');
 const adminCategories = require('./routes/admin/categories/index');
+const commentsRouter = require('./routes/admin/comments/index')
 
 //Use routes
-app.use('/', home);
-app.use('/admin', admin);
-app.use('/admin/posts', adminPosts);
+app.use('/', homeRouter);
+app.use('/admin', adminRouter);
+app.use('/admin/posts', adminPostsRouter);
 app.use('/admin/categories', adminCategories);
+app.use('/admin/comments', commentsRouter);
 
 
 

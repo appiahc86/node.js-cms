@@ -125,11 +125,17 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+//logout
+router.post('/logout', (req, res)=> {
+    req.logout();
+    res.redirect('/');
+})
+
 
 //Get single post
 router.get('/post/:id', (req, res) => {
     const id = req.params.id;
-    Post.findById(id).lean().then(post => {
+    Post.findById(id).populate({path: 'comments', populate: {path: 'user', model: 'users'}}).lean().then(post => {
         Category.find({}).lean().then(categories => {
             res.render('home/single_post', {post: post, categories: categories});
         })
