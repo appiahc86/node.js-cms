@@ -18,6 +18,7 @@
                         <th>Allow Comments</th>
                         <th>Date</th>
                         <th>Body</th>
+                        <th>VIEW</th>
                         <th>Image</th>
                         <th colspan="2">Action</th>
                     </tr>
@@ -34,6 +35,7 @@
                                    <td>{{allowComments}}</td>
                                    <td>{{generateDate date 'Do-MM-YYYY'}}</td>
                                    <td>{{body}}</td>
+                                   <td><a href="/post/{{_id}}">View</a></td>
                                    <td>
                                        <img src="/images/{{image}}" height="64" width="64" alt="">
                                    </td>

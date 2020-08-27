@@ -74,6 +74,7 @@ router.post('/store', (req, res)=>{
        status: status,
        allowComments: allowComments,
        body: body,
+       user: req.user.id,
        image: imageName
    });
 

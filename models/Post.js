@@ -23,6 +23,11 @@ const PostSchema = new Schema({
     default: 0
     },
 
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'users'
+    },
+
     body:{
         type: String,
         require: true
